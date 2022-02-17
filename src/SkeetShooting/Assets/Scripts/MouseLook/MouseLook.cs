@@ -1,20 +1,19 @@
+using SimpleInputNamespace;
 using UnityEngine;
 
 public class MouseLook : MonoBehaviour
 {
     [SerializeField] private float _mouseSensitivity = 100f;
     [SerializeField] private Transform _playerBody;
-
-    private float xRotation = 0;
-    void Start()
-    {
-        //Cursor.lockState = CursorLockMode.Locked;
-    }
+    [SerializeField] private Joystick _joystick;
     
+
+    private float xRotation;
+
     void Update()
     {
-        float mouseX = Input.GetAxis("Horizontal") * _mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Vertical") * _mouseSensitivity * Time.deltaTime;
+        float mouseX =  _joystick.xAxis.value * _mouseSensitivity * Time.deltaTime;
+        float mouseY = _joystick.yAxis.value * _mouseSensitivity * Time.deltaTime;
 
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90, 90);

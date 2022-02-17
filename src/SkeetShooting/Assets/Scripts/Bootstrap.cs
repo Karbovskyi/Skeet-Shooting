@@ -6,7 +6,10 @@ public class Bootstrap : MonoBehaviour
 {
     [SerializeField] private GameObject _skeetPrefab;
     [SerializeField] private UISkeetShootingMediator _mediator;
+    [SerializeField] private RaycastThrowable _raycastThrowable;
     private Timer _timer;
+    private GunShootService _gunShootService;
+    
     
     void Start()
     {
@@ -28,13 +31,15 @@ public class Bootstrap : MonoBehaviour
         ThrowableObjectDestroyService throwableDestroyService = new ThrowableObjectDestroyService(throwableObjectsPool, _mediator);
         ThrowableObjectSubscribeService throwableSubscribeService = new ThrowableObjectSubscribeService(throwableDestroyService, _timer);
         throwableSubscribeService.SubscribeDestroyEvent(skeet);
-        
-        
+
+        _gunShootService = new GunShootService(_timer, _raycastThrowable);
+
     }
 
 
     void Update()
     {
         _timer.UpdateTime();
+        _gunShootService.Update();
     }
 }
