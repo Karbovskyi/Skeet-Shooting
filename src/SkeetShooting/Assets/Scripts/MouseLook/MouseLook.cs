@@ -1,18 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MouseLook : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] private float _mouseSensitivity = 100f;
+    [SerializeField] private Transform _playerBody;
+
+    private float xRotation = 0;
     void Start()
     {
-        
+        //Cursor.lockState = CursorLockMode.Locked;
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
+        float mouseX = Input.GetAxis("Horizontal") * _mouseSensitivity * Time.deltaTime;
+        float mouseY = Input.GetAxis("Vertical") * _mouseSensitivity * Time.deltaTime;
+
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -90, 90);
         
+        transform.localRotation = Quaternion.Euler(xRotation, 0,0 );
+        _playerBody.Rotate(Vector3.up * mouseX);
     }
 }
