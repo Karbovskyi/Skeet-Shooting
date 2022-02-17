@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class Skeet : MonoBehaviour, IThrowableObject
 {
@@ -6,10 +7,24 @@ public class Skeet : MonoBehaviour, IThrowableObject
     [SerializeField] private ParticleSystem _destroyParticle;
     [SerializeField] private ParticleSystem _flyParticle;
 
+    [SerializeField] private ThrowableFallDetector throwableFallDetector;
+    
+    public event IThrowableObject.ThrowableObjectDestroy ThrowableDestroy;
+
+    private Rigidbody myRigidBody;
+
+    public void Start()
+    {
+        throwableFallDetector._throwable = this;
+        myRigidBody = gameObject.GetComponent<Rigidbody>();
+    }
+
     public void Throw(Vector3 force)
     {
         PrepareSkeet();
-        gameObject.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
+        
+        myRigidBody.isKinematic = false;
+        myRigidBody.AddForce(force, ForceMode.Impulse);
     }
 
     public void DestroyThrowableObject()
@@ -18,12 +33,18 @@ public class Skeet : MonoBehaviour, IThrowableObject
         
         _skeetGameObject.SetActive(false);
         _flyParticle.Stop();
+        
+        myRigidBody.isKinematic = true;
+
+        ThrowableDestroy?.Invoke(this);
     }
 
     public void SetPosition(Vector3 position)
     {
         transform.position = position;
     }
+
+    
 
     private void PrepareSkeet()
     {

@@ -5,6 +5,8 @@ using UnityEngine;
 public class Bootstrap : MonoBehaviour
 {
     [SerializeField] private GameObject _skeetPrefab;
+    [SerializeField] private UISkeetShootingMediator _mediator;
+    private Timer _timer;
     
     void Start()
     {
@@ -13,11 +15,26 @@ public class Bootstrap : MonoBehaviour
         IThrowableObjectsPool throwableObjectsPool = new DefaultPool();
         IThrowableObjectsFactory skeetFactory = new SkeetFactory(_skeetPrefab);
 
-        var skeet = skeetFactory.GetThrowableObject();
+        IThrowableObject skeet = skeetFactory.GetThrowableObject();
+        skeet.SetPosition(new Vector3(0, -5, 0));
         throwableObjectsPool.AddThrowableObject(skeet);
+
+        _timer = new Timer();
         
-        ShootService shootService = new ShootService( shootForceService, positionService, throwableObjectsPool );
+        ShootService shootService = new ShootService( shootForceService, positionService, throwableObjectsPool, _timer);
         
-        shootService.Shoot();
+        _mediator.Initialize(shootService);
+        
+        ThrowableObjectDestroyService throwableDestroyService = new ThrowableObjectDestroyService(throwableObjectsPool, _mediator);
+        ThrowableObjectSubscribeService throwableSubscribeService = new ThrowableObjectSubscribeService(throwableDestroyService, _timer);
+        throwableSubscribeService.SubscribeDestroyEvent(skeet);
+        
+        
+    }
+
+
+    void Update()
+    {
+        _timer.UpdateTime();
     }
 }

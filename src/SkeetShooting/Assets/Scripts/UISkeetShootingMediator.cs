@@ -1,18 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UISkeetShootingMediator : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private GameObject _shootButton;
+    private IThrowableObjectShootService _shootService;
 
-    // Update is called once per frame
-    void Update()
+    public void Initialize(IThrowableObjectShootService shootService)
     {
-        
+        _shootService = shootService;
     }
+    
+    public void Shoot() => _shootService.Shoot();
+    public void ActivateShootButton() => _shootButton.SetActive(true);
+    public void DeactivateShootButton() => _shootButton.SetActive(false);
+
+
 }
