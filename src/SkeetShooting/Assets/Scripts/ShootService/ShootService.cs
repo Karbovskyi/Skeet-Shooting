@@ -22,7 +22,6 @@ public class ShootService : IThrowableObjectShootService
     public void Shoot()
     {
         Vector3 position = _throwableObjectStartPositionService.GetStartPosition();
-        
         Vector3 shootForce = _getShootForceService.GetForceVector3(position);
         
         IThrowableObject throwableObject = _throwableObjectsPool.GetThrowableObject();

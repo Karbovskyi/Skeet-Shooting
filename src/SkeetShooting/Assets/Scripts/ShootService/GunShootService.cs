@@ -3,7 +3,7 @@
 public class GunShootService
 {
     private Timer _timer;
-    private RaycastThrowable _raycastThrowable;
+    private IRaycastThrowable _raycastThrowable;
     private UISkeetShootingMediator _mediator;
     private IGetDestroyTimeService _destroyTimeService;
 
@@ -13,7 +13,7 @@ public class GunShootService
 
     private float progressBarValue;
     
-    public GunShootService(Timer timer, RaycastThrowable raycastThrowable, UISkeetShootingMediator mediator, IGetDestroyTimeService destroyTimeService)
+    public GunShootService(Timer timer, IRaycastThrowable raycastThrowable, UISkeetShootingMediator mediator, IGetDestroyTimeService destroyTimeService)
     {
         _timer = timer;
         _raycastThrowable = raycastThrowable;
@@ -23,7 +23,7 @@ public class GunShootService
     
     public void Update()
     {
-        if (_raycastThrowable.inCast)
+        if (_raycastThrowable.InCast)
         {
             if (onInCast == false)
             {
@@ -39,7 +39,7 @@ public class GunShootService
             
             if (xTime <= 0)
             {
-                _raycastThrowable.hit.transform.GetComponent<IThrowableObject>().DestroyThrowableObject();
+                _raycastThrowable.Hit.transform.GetComponent<IThrowableObject>().DestroyThrowableObject();
                 progressBarValue = 0;
             }
 
@@ -55,37 +55,4 @@ public class GunShootService
             }
         }
     }
-}
-
-
-public class GetDestroyTimeService : IGetDestroyTimeService
-{
-
-    public float GetTimeX(float startTime)
-    {
-        if (startTime < 1)
-        {
-            return 0.25f;
-        }
-        if (startTime < 2)
-        {
-            return 0.5f;
-        }
-        if (startTime < 3)
-        {
-            return 0.75f;
-        }
-        if (startTime < 4)
-        {
-            return 1f;
-        }
-
-        return 1.2f;
-    }
-    
-}
-
-public interface IGetDestroyTimeService
-{
-    public float GetTimeX(float startTime);
 }
