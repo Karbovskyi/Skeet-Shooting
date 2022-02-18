@@ -3,6 +3,7 @@
 public class RaycastThrowable : MonoBehaviour
 {
     public bool inCast;
+    public RaycastHit hit;
 
     public void Update()
     {
@@ -11,7 +12,8 @@ public class RaycastThrowable : MonoBehaviour
     
     public void Cast()
     {
-        RaycastHit hit;
+        
+        
 
         //Debug.DrawRay(transform.position,transform.forward *200, Color.red) ;
 
@@ -19,7 +21,6 @@ public class RaycastThrowable : MonoBehaviour
         {
             Debug.Log(hit.transform.name);
             inCast = true;
-
         }
         else
         {

@@ -1000,6 +1000,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shootButton: {fileID: 561610430}
+  _shootCircle: {fileID: 28011981}
 --- !u!1 &1694213950
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,6 +7,7 @@ public class Bootstrap : MonoBehaviour
     [SerializeField] private GameObject _skeetPrefab;
     [SerializeField] private UISkeetShootingMediator _mediator;
     [SerializeField] private RaycastThrowable _raycastThrowable;
+
     private Timer _timer;
     private GunShootService _gunShootService;
     
@@ -17,6 +18,7 @@ public class Bootstrap : MonoBehaviour
         IThrowableObjectStartPositionService positionService = new ThrowableStartPositionService();
         IThrowableObjectsPool throwableObjectsPool = new DefaultPool();
         IThrowableObjectsFactory skeetFactory = new SkeetFactory(_skeetPrefab);
+        IGetDestroyTimeService getDestroyTimeService = new GetDestroyTimeService();
 
         IThrowableObject skeet = skeetFactory.GetThrowableObject();
         skeet.SetPosition(new Vector3(0, -5, 0));
@@ -32,7 +34,7 @@ public class Bootstrap : MonoBehaviour
         ThrowableObjectSubscribeService throwableSubscribeService = new ThrowableObjectSubscribeService(throwableDestroyService, _timer);
         throwableSubscribeService.SubscribeDestroyEvent(skeet);
 
-        _gunShootService = new GunShootService(_timer, _raycastThrowable);
+        _gunShootService = new GunShootService(_timer, _raycastThrowable, _mediator, getDestroyTimeService);
 
     }
 
